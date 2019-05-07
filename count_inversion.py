@@ -4,6 +4,7 @@ running time is O(nlogn)
 using divide and conquer
 """
 
+
 def count_split_inv(left, right):
     count = 0
     length = len(left) + len(right)
@@ -31,7 +32,6 @@ def count_inversion(array):
         left = array[:mid]
         right = array[mid:]
 
-        a = b = c = 0
         a = count_inversion(left)
         b = count_inversion(right)
         c = count_split_inv(left, right)
@@ -40,5 +40,9 @@ def count_inversion(array):
 
 
 if __name__ == '__main__':
-    test_lst = [6, 5, 4, 3, 2, 1]
+    # generate random list of length 100
+    import random
+    test_lst = [random.gauss(0, 10) for _ in range(100)]
+
+    # test_lst = [6, 5, 4, 3, 2, 1]
     print(count_inversion(test_lst))
