@@ -5,21 +5,21 @@ using divide and conquer
 """
 
 
-def count_split_inv(left, right):
+def count_split_inv(array, left, right):
     count = 0
+    i, j = 0, 0
     length = len(left) + len(right)
+    left.append(float('inf'))
+    right.append(float('inf'))
 
-    i = j = 0
-    for _ in range(length):
-        if i >= len(left):
-            j += 1
-        elif j >= len(right):
+    for k in range(length):
+        if left[i] < right[j]:
+            array[k] = left[i]
             i += 1
-        elif left[i] <= right[j]:
-            i += 1
-        elif left[i] > right[j]:
+        else:
+            array[k] = right[j]
+            count += len(left) - 1 - i
             j += 1
-            count += len(left) - i
     return count
 
 
@@ -31,18 +31,21 @@ def count_inversion(array):
         mid = len(array) // 2
         left = array[:mid]
         right = array[mid:]
-
         a = count_inversion(left)
         b = count_inversion(right)
-        c = count_split_inv(left, right)
-
+        c = count_split_inv(array, left, right)
     return a + b + c
 
 
 if __name__ == '__main__':
-    # generate random list of length 100
-    import random
-    test_lst = [random.gauss(0, 10) for _ in range(100)]
+    inputs = list()
+    with open('IntegerArray.txt', 'r') as f:
+        while True:
+            try:
+                num = int(f.readline().strip('\n'))
+                inputs.append(num)
+            except ValueError:
+                break
 
-    # test_lst = [6, 5, 4, 3, 2, 1]
-    print(count_inversion(test_lst))
+    res = count_inversion(inputs)
+    print(res)
