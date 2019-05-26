@@ -47,5 +47,8 @@ if __name__ == '__main__':
             except ValueError:
                 break
 
+#    with open('IntegerArray.txt', 'r') as f:
+#        inputs = list(map(int, f.read().splitlines()))
+
     res = count_inversion(inputs)
     print(res)
