@@ -24,9 +24,5 @@ def run(times):
 
 
 if __name__ == '__main__':
-    res = 0
-    for _ in range(10):
-        res += run(100000)
-    res = res / 10
-    print(res)
+    print(run(1000000))
     # the result should converge to 37.2385281 (12 × 𝐇₁₂, harmonic number)
