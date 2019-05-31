@@ -21,10 +21,24 @@ def fib_dp(n, cache=None):
             return res
 
 
+buffer = dict()
+
+
+def fib_dp_LBYL(n):
+    if n == 0 or n == 1:
+        return 1
+    if n in buffer:
+        return buffer[n]
+    else:
+        res = fib_dp_LBYL(n-2) + fib_dp_LBYL(n-2)
+        buffer[n] = res
+        return res
+
+
 cache = dict()
 
 
-def fib_dp2(n):
+def fib_dp_EAFP(n):
     try:
         return cache[n]
     except KeyError:
@@ -32,7 +46,7 @@ def fib_dp2(n):
             cache[n] = 1
             return 1
         else:
-            res = fib_dp2(n-1) + fib_dp2(n-2)
+            res = fib_dp_EAFP(n-1) + fib_dp_EAFP(n-2)
             cache[n] = res
             return res
 
@@ -45,14 +59,19 @@ def fib_bottom_up(n):
 
 
 if __name__ == '__main__':
-    test_seq = (100, 200, 300)
+    test_seq = (10, 100, 1000)
 
     for num in test_seq:
-        test = timeit.Timer('fib_dp2(num)', setup='num', globals=globals())
-        print(f'fib_dp2({num}) cost time:  ', test.timeit(number=10000))
+        test = timeit.Timer('fib_dp_LBYL(num)', setup='num', globals=globals())
+        print(f'fib_dp_LBYL({num}) cost time:  ', test.timeit(number=100000))
+    print()
+
+    for num in test_seq:
+        test = timeit.Timer('fib_dp_EAFP(num)', setup='num', globals=globals())
+        print(f'fib_dp_EAFP({num}) cost time:  ', test.timeit(number=100000))
     print()
 
     for num in test_seq:
         test = timeit.Timer('fib_bottom_up(num)',
                             setup='num', globals=globals())
-        print(f'fib_bottom_up({num}) cost time:', test.timeit(number=10000))
+        print(f'fib_bottom_up({num}) cost time:', test.timeit(number=100000))
