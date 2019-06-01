@@ -39,14 +39,13 @@ def count_inversion(array):
 
 
 def test_case():
-    f = open('IntegerArray.txt', 'r')
-    while True:
-        try:
-            num = int(f.readline().strip('\n'))
-            yield num
-        except ValueError:
-            break
-    f.close()
+    with open('IntegerArray.txt', 'r') as f:
+        while True:
+            try:
+                num = int(f.readline().strip('\n'))
+                yield num
+            except ValueError:
+                break
 
 
 if __name__ == '__main__':

@@ -12,15 +12,26 @@ def partition(array, l, r):
     return i-1
 
 
+def random_partition(array, l, r):
+    i = random.randrange(l, r)
+    array[l], array[i] = array[i], array[l]
+    return partition(array, l, r)
+
+
 def quick_sort(array, l, r):
     if l < r:
-        p = partition(array, l, r)
+        p = random_partition(array, l, r)
         quick_sort(array, l, p)
         quick_sort(array, p+1, r)
 
 
 if __name__ == "__main__":
-    lst = random.sample(range(1000), 20)
+    try:
+        lst = random.choices(range(1000), k=20)
+    except ValueError:
+        print('sample size exceeds population size')
+
+    # output
     print('input: ', lst)
     quick_sort(lst, 0, len(lst))
     print('sorted:', lst)
