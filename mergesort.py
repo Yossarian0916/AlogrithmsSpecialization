@@ -1,18 +1,15 @@
 """
 merge sort implemented in python
 """
-import numpy as np
 
 
 def merge(A, p, q, r):
-    m = q - p + 1
-    n = r - q
     # copy of sorted subarrays
     L = A[p:q+1]
     R = A[q+1:]
     # add a sentinel value at the end of the array
-    L.append(np.inf)
-    R.append(np.inf)
+    L.append(float('inf'))
+    R.append(float('inf'))
     # merge the sorted subarrays
     i, j = 0, 0
     for k in range(p, r+1):
@@ -38,6 +35,5 @@ if __name__ == '__main__':
     lst = [1, 3, 5, 2, 4, 6]
     print(lst)
 
-    n = len(lst)
-    merge_sort(lst, 0, n-1)
+    merge_sort(lst, 0, len(lst)-1)
     print(lst)
