@@ -1,20 +1,5 @@
 import random
 
-count = 0
-
-
-def partition(array, l, r):
-    global count
-    pivot = array[l]  # use the 1st element as pivot
-    i = l+1
-    for j in range(l+1, r+1):
-        if array[j] < pivot:
-            array[j], array[i] = array[i], array[j]
-            i += 1
-    array[l], array[i-1] = array[i-1], array[l]
-    count += r-l
-    return i-1
-
 
 def random_partition(array, l, r):
     i = random.randrange(l, r)
@@ -38,6 +23,22 @@ def median_of_three(array, l, r):
 def last_element(array, l, r):
     array[l], array[r] = array[r], array[l]
     return partition(array, l, r)
+
+
+count = 0
+
+
+def partition(array, l, r):
+    global count
+    pivot = array[l]  # use the 1st element as pivot
+    i = l+1
+    for j in range(l+1, r+1):
+        if array[j] < pivot:
+            array[j], array[i] = array[i], array[j]
+            i += 1
+    array[l], array[i-1] = array[i-1], array[l]
+    count += r-l
+    return i-1
 
 
 def quick_sort(array, l, r):
