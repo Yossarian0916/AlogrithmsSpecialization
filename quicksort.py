@@ -2,7 +2,7 @@ import random
 
 
 def random_partition(array, l, r):
-    i = random.randrange(l, r)
+    i = random.randint(l, r)
     array[l], array[i] = array[i], array[l]
     return partition(array, l, r)
 
