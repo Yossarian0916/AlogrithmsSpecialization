@@ -1,14 +1,18 @@
 import random
 
 
-def random_selection(array, i):
+def random_selection(array, n):
+    if n <= 0 or n > len(array):
+        return None
+    if len(array) == 1:
+        return array[0]
     p = random_partition(array)
-    if i-1 == p:
+    if n-1 == p:
         return array[p]
-    elif i-1 < p:
-        return random_selection(array[:p], i)
+    elif n-1 < p:
+        return random_selection(array[:p], n)
     else:
-        return random_selection(array[p:], i-p)
+        return random_selection(array[p:], n-p)
 
 
 def random_partition(array):
