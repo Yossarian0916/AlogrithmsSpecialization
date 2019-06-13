@@ -1,9 +1,9 @@
 def Dselect(array, n):
     pivot = choose_pivot(array, len(array))
     p = partition(array, array.index(pivot))
-    if p == n:
+    if p == n-1:
         return array[p]
-    elif p < n:
+    elif p < n-1:
         return Dselect(array[p:], n-p)
     else:
         return Dselect(array[:p], n)
@@ -33,3 +33,8 @@ def choose_pivot(array, n):
         groups = [array[n:n+5] for n in range(0, n, 5)]
         medians = [middle(group) for group in groups]
         return choose_pivot(medians, len(medians))
+
+
+if __name__ == "__main__":
+    lst = [2, 1, 5, 3, 4, 6, 0, -1]
+    print(Dselect(lst, 3))
