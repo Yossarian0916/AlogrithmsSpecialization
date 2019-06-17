@@ -8,6 +8,10 @@ class Graph:
         self.add_nodes(nodes)
         self.add_edges(edges)
 
+    @property
+    def nodes(self):
+        return set(self.graph.keys())
+
     def add_node(self, node):
         self.graph[node] = list()
 
@@ -16,18 +20,6 @@ class Graph:
             return None
         for node in nodes:
             self.add_node(node)
-
-    def add_edge(self, edge):
-        node1, node2 = edge
-        self.graph[node1].append(node2)
-        if not self.directed:
-            self.graph[node2].append(node1)
-
-    def add_edges(self, edges):
-        if edges is None:
-            return None
-        for edge in edges:
-            self.add_edge(edge)
 
     def remove_node(self, node):
         try:
@@ -48,24 +40,52 @@ class Graph:
         for node in nodes:
             self.remove_node(node)
 
-    def find_path(self, source, dest, path=[]):
-        path.append(source)
+    @property
+    def edges(self):
+        edges = set()
+        for source, neighbors in self.graph.items():
+            for neighbor in neighbors:
+                edges.add((source, neighbor))
+        return edges
+
+    def add_edge(self, edge):
+        node1, node2 = edge
+        self.graph[node1].append(node2)
+        if not self.directed:
+            self.graph[node2].append(node1)
+
+    def add_edges(self, edges):
+        if edges is None:
+            return None
+        for edge in edges:
+            self.add_edge(edge)
+
+    def remove_edge(self, edge):
+        self.remove_nodes(edge)
+
+    def remove_edges(self, edges):
+        for edge in edges:
+            self.remove_nodes(edge)
+
+    def find_paths(self, source, dest, path=[]):
+        """greedy search for a possible path"""
+        path = path + [source]
+        paths = []
         if source == dest:
-            return path
-        else:
-            for node in self.graph[source]:
-                if node not in path:
-                    res = self.find_path(node, dest, path)
-                    if res:
-                        return res
-        return None
+            return [path]
+        for node in self.graph[source]:
+            if node not in path:
+                newpaths = self.find_paths(node, dest, path)
+                for newpath in newpaths:
+                    paths.append(newpath)
+        return paths
 
 
 if __name__ == "__main__":
     graph = Graph()
     graph.add_edges([(1, 2), (2, 3), (2, 4), (3, 6),
                      (5, 6), (4, 5), (1, 7), (4, 7)])
-    graph.add_node(10)
-    print(graph.find_path(4, 5))
+    print(graph.find_paths(5, 4))
 
-    print(graph.graph)
+    print(graph.edges)
+    print(graph.nodes)
