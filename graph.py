@@ -10,7 +10,7 @@ class Graph:
 
     @property
     def nodes(self):
-        return set(self.graph.keys())
+        return list(self.graph.keys())
 
     def add_node(self, node):
         self.graph[node] = list()
@@ -42,10 +42,10 @@ class Graph:
 
     @property
     def edges(self):
-        edges = set()
+        edges = list()
         for source, neighbors in self.graph.items():
             for neighbor in neighbors:
-                edges.add((source, neighbor))
+                edges.append((source, neighbor))
         return edges
 
     def add_edge(self, edge):
@@ -89,3 +89,5 @@ if __name__ == "__main__":
 
     print(graph.edges)
     print(graph.nodes)
+    import random
+    print(random.sample(graph.edges, 1)[0])
