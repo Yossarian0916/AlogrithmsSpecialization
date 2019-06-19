@@ -3,3 +3,5 @@
 .ipynb_checkpoints/
 .algo1slides/
 __pycache__/
+algo1slides/
+.pdf

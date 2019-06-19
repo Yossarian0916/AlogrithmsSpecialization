@@ -2,6 +2,26 @@ from collections import defaultdict
 import random
 
 
+class Graph:
+    def __init__(self, adj_list):
+        self.graph = adj_list
+
+    @property
+    def nodes(self):
+        nodes = list()
+        for node in self.graph.keys():
+            nodes.append({node})
+        return nodes
+
+    @property
+    def edges(self):
+        edges = list()
+        for start, endpoints in self.graph.items():
+            for endpoint in endpoints:
+                edges.append((start, endpoint))
+        return edges
+
+
 def karger_mincut(graph):
     while len(graph.keys()) > 2:
         u = random.choice(list(graph.keys()))
@@ -13,12 +33,15 @@ def karger_mincut(graph):
 
 def merge(graph, u, v):
     graph[u] = graph[u] + graph[v]
+    # remove self-loop
     while graph[u].count(v) > 0:
         graph[u].remove(v)
     while graph[u].count(u) > 0:
         graph[u].remove(u)
+    # merge endpoints, remove end vertex
     del graph[v]
 
+    # replace vertex v with vertex u
     for start in graph.keys():
         for idx, end in enumerate(graph[start]):
             if end == v:
@@ -36,11 +59,12 @@ def main(graph, minimum=None):
 
 
 if __name__ == "__main__":
-    graph = defaultdict(list)
+    adj_list = defaultdict(list)
     with open("kargerMinCut.txt", "r") as f:
         text = f.read().splitlines()
         for line in text:
             line = list(map(int, line.split('\t')[:-1]))
             for i in range(1, len(line)):
-                graph[line[0]].append(line[i])
-    print(main(graph))
+                adj_list[line[0]].append(line[i])
+
+    test = Graph(adj_list)
