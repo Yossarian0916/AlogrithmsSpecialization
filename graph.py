@@ -1,4 +1,5 @@
 from collections import defaultdict
+from queue import Queue
 
 
 class Graph:
@@ -67,27 +68,25 @@ class Graph:
         for edge in edges:
             self.remove_nodes(edge)
 
-    def find_paths(self, source, dest, path=[]):
-        """greedy search for a possible path"""
-        path = path + [source]
-        paths = []
-        if source == dest:
-            return [path]
-        for node in self.graph[source]:
-            if node not in path:
-                newpaths = self.find_paths(node, dest, path)
-                for newpath in newpaths:
-                    paths.append(newpath)
-        return paths
+    def bfs(self, start):
+        # mark visited nodes
+        visited = dict.fromkeys(self.nodes, False)
+        # queue for BFS
+        Q = Queue(maxsize=len(self.graph))
+        # init
+        Q.put(start)
+        visited[start] = True
+        while not Q.empty():
+            v = Q.get()
+            print(v, end=' ')  # print nodes on screen
+            for neighbor in self.graph[v]:
+                if not visited[neighbor]:
+                    Q.put(neighbor)
+                    visited[neighbor] = True
 
 
 if __name__ == "__main__":
     graph = Graph()
     graph.add_edges([(1, 2), (2, 3), (2, 4), (3, 6),
                      (5, 6), (4, 5), (1, 7), (4, 7)])
-    print(graph.find_paths(5, 4))
-
-    print(graph.edges)
-    print(graph.nodes)
-    import random
-    print(random.sample(graph.edges, 1)[0])
+    graph.bfs(1)
