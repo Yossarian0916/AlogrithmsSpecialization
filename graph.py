@@ -1,5 +1,4 @@
-from collections import defaultdict
-from queue import Queue
+from collections import defaultdict, deque
 
 
 class Graph:
@@ -68,39 +67,72 @@ class Graph:
         for edge in edges:
             self.remove_nodes(edge)
 
-    def bfs(self, start):
+    def BFS(self, start):
+        res = list()
         # mark visited nodes
         visited = dict.fromkeys(self.nodes, False)
         # queue for BFS
-        Q = Queue(maxsize=len(self.graph))
+        Q = deque(maxlen=len(self.nodes))
         # init
-        Q.put(start)
+        Q.append(start)
         visited[start] = True
-        while not Q.empty():
-            v = Q.get()
-            print(v, end=' ')  # print nodes on screen
+        while Q:
+            v = Q.popleft()
+            res.append(v)
             for neighbor in self.graph[v]:
                 if not visited[neighbor]:
-                    Q.put(neighbor)
+                    Q.append(neighbor)
                     visited[neighbor] = True
+        return res
+
+    def DFS(self, start):
+        res = list()
+        visited = dict.fromkeys(self.nodes, False)
+        S = list()
+        S.append(start)
+        visited[start] = True
+        while S:
+            v = S.pop()
+            res.append(v)
+            for neighbor in self.graph[v]:
+                if not visited[neighbor]:
+                    S.append(neighbor)
+                    visited[neighbor] = True
+        return res
+
+    def DFS_util(self, start, visited, stack, res):
+        stack.append(start)
+        visited[start] = True
+        while stack:
+            v = stack.pop()
+            res.append(v)
+            for neighbor in self.graph[v]:
+                if not visited[neighbor]:
+                    self.DFS_util(neighbor, visited, stack, res)
+
+    def DFS_recur(self, start):
+        res = list()
+        visited = dict.fromkeys(self.nodes, False)
+        stack = list()
+        self.DFS_util(start, visited, stack, res)
+        return res
 
     def shortest_path_bfs(self, start, end):
-        # marked visited nodes
         visited = dict.fromkeys(self.nodes, False)
         # keep track of distance
         dist = dict.fromkeys(self.nodes, float('inf'))
         # keep predecessor
         pred = dict.fromkeys(self.nodes, None)
-        # init queue
-        Q = Queue(maxsize=len(self.nodes))
-        Q.put(start)
+
+        Q = deque(maxlen=len(self.nodes))
+        Q.append(start)
         visited[start] = True
         dist[start] = 0
-        while not Q.empty():
-            v = Q.get()
+        while Q:
+            v = Q.popleft()
             for neighbor in self.graph[v]:
                 if not visited[neighbor]:
-                    Q.put(neighbor)
+                    Q.append(neighbor)
                     pred[neighbor] = v
                     dist[neighbor] = dist[v] + 1
                     visited[neighbor] = True
@@ -120,4 +152,6 @@ if __name__ == "__main__":
     graph = Graph()
     graph.add_edges([(1, 2), (2, 3), (2, 4), (3, 6),
                      (5, 6), (4, 5), (1, 7), (4, 7)])
-    print(graph.shortest_path_bfs(1, 4))
+    print("depth first search: ", graph.BFS(1))
+    print("breadth first search: ", graph.DFS(1))
+    print("recursive breadth first search: ", graph.DFS_recur(1))
