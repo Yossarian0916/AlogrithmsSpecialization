@@ -100,22 +100,20 @@ class Graph:
                     visited[neighbor] = True
         return res
 
-    def DFS_util(self, start, visited, stack, res):
-        stack.append(start)
-        visited[start] = True
-        while stack:
-            v = stack.pop()
-            res.append(v)
-            for neighbor in self.graph[v]:
-                if not visited[neighbor]:
-                    self.DFS_util(neighbor, visited, stack, res)
+    def DFS_util(self, node, visited, dfs):
+        visited[node] = True
+        dfs.append(node)
+        for neighbor in self.graph[node]:
+            if not visited[neighbor]:
+                self.DFS_util(neighbor, visited, dfs)
 
     def DFS_recur(self, start):
-        res = list()
         visited = dict.fromkeys(self.nodes, False)
-        stack = list()
-        self.DFS_util(start, visited, stack, res)
-        return res
+        dfs = list()
+        for node in self.nodes:
+            if not visited[node]:
+                self.DFS_util(node, visited, dfs)
+        return dfs
 
     def shortest_path_bfs(self, start, end):
         visited = dict.fromkeys(self.nodes, False)
