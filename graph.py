@@ -111,41 +111,34 @@ class Graph:
                     visited[edge] = True
         return dfs
 
-    def DFS_util(self, node, visited, dfs):
-        visited[node] = True
+    def DFS_util(self, node, dfs):
         dfs.append(node)
         for edge in self.graph[node]:
-            if not visited[edge]:
-                self.DFS_util(edge, visited, dfs)
+            if node not in dfs:
+                self.DFS_util(edge, dfs)
 
     def DFS_recur(self, start):
         """resursive version of depth-first-search"""
-        visited = dict.fromkeys(self.nodes, False)
         dfs = list()  # output result
         for node in self.nodes:
-            if not visited[node]:
-                self.DFS_util(node, visited, dfs)
+            if node not in dfs:
+                self.DFS_util(node, dfs)
         return dfs
 
-    def topological_util(self, node, visited, label, current_label):
+    def topological_util(self, node, visited, label):
         visited[node] = True
         for edge in self.graph[node]:
             if not visited[edge]:
-                current_label = self.topological_util(
-                    edge, visited, label, current_label)
-        label[current_label-1] = node
-        return current_label-1
+                self.topological_util(edge, visited, label)
+        label.appendleft(node)
 
     def topological_sort(self):
         visited = dict.fromkeys(self.nodes, False)
         # store all nodes in topological order, the index is the position
-        label = [None] * len(self.nodes)
-        # keep track of ordering
-        current_label = len(self.nodes)
+        label = deque()
         for node in self.nodes:
             if not visited[node]:
-                current_label = self.topological_util(
-                    node, visited, label, current_label)
+                self.topological_util(node, visited, label)
         return label
 
     def shortest_path_bfs(self, start, end):
