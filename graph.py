@@ -111,18 +111,20 @@ class Graph:
                     visited[edge] = True
         return dfs
 
-    def DFS_util(self, node, dfs):
+    def DFS_util(self, node, visited, dfs):
+        visited[node] = True
         dfs.append(node)
         for edge in self.graph[node]:
-            if node not in dfs:
-                self.DFS_util(edge, dfs)
+            if not visited[edge]:
+                self.DFS_util(edge, visited, dfs)
 
     def DFS_recur(self, start):
         """resursive version of depth-first-search"""
+        visited = dict.fromkeys(self.nodes, False)
         dfs = list()  # output result
         for node in self.nodes:
-            if node not in dfs:
-                self.DFS_util(node, dfs)
+            if not visited[node]:
+                self.DFS_util(node, visited, dfs)
         return dfs
 
     def topological_util(self, node, visited, label):
@@ -181,5 +183,6 @@ if __name__ == "__main__":
     print("recursive breadth first search: ", graph.DFS_recur(1))
 
     diGraph = Graph(True)
-    diGraph.add_edges([('s', 'v'), ('v', 't'), ('s', 'w'), ('w', 't')])
+    diGraph.add_edges([('a', 'b'), ('a', 'g'), ('b', 'c'),
+                       ('g', 'c'), ('c', 'd'), ('c', 'f'), ('d', 'e'), ('d', 'f')])
     print(diGraph.topological_sort())
