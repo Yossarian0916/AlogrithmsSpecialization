@@ -10,10 +10,19 @@ class Graph:
 
     @property
     def nodes(self):
-        return list(self.graph.keys())
+        if not self.directed:
+            return list(self.graph.keys())
+        elif self.directed:
+            nodes = set()
+            nodes.update(self.graph.keys())
+            for node in self.graph.keys():
+                for neighbor in self.graph[node]:
+                    nodes.add(neighbor)
+            return list(nodes)
 
     def add_node(self, node):
-        self.graph[node] = list()
+        if node not in self.nodes:
+            self.graph[node] = list()
 
     def add_nodes(self, nodes):
         if nodes is None:
@@ -68,7 +77,8 @@ class Graph:
             self.remove_nodes(edge)
 
     def BFS(self, start):
-        res = list()
+        """implement breadth-first-search using queue"""
+        bfs = list()  # output result
         # mark visited nodes
         visited = dict.fromkeys(self.nodes, False)
         # queue for BFS
@@ -78,42 +88,65 @@ class Graph:
         visited[start] = True
         while Q:
             v = Q.popleft()
-            res.append(v)
-            for neighbor in self.graph[v]:
-                if not visited[neighbor]:
-                    Q.append(neighbor)
-                    visited[neighbor] = True
-        return res
+            bfs.append(v)
+            for edge in self.graph[v]:
+                if not visited[edge]:
+                    Q.append(edge)
+                    visited[edge] = True
+        return bfs
 
     def DFS(self, start):
-        res = list()
+        """implement depth-first-search using stack"""
+        dfs = list()  # output result
         visited = dict.fromkeys(self.nodes, False)
         S = list()
         S.append(start)
         visited[start] = True
         while S:
             v = S.pop()
-            res.append(v)
-            for neighbor in self.graph[v]:
-                if not visited[neighbor]:
-                    S.append(neighbor)
-                    visited[neighbor] = True
-        return res
+            dfs.append(v)
+            for edge in self.graph[v]:
+                if not visited[edge]:
+                    S.append(edge)
+                    visited[edge] = True
+        return dfs
 
     def DFS_util(self, node, visited, dfs):
         visited[node] = True
         dfs.append(node)
-        for neighbor in self.graph[node]:
-            if not visited[neighbor]:
-                self.DFS_util(neighbor, visited, dfs)
+        for edge in self.graph[node]:
+            if not visited[edge]:
+                self.DFS_util(edge, visited, dfs)
 
     def DFS_recur(self, start):
+        """resursive version of depth-first-search"""
         visited = dict.fromkeys(self.nodes, False)
-        dfs = list()
+        dfs = list()  # output result
         for node in self.nodes:
             if not visited[node]:
                 self.DFS_util(node, visited, dfs)
         return dfs
+
+    def topological_util(self, node, visited, label, current_label):
+        visited[node] = True
+        for edge in self.graph[node]:
+            if not visited[edge]:
+                current_label = self.topological_util(
+                    edge, visited, label, current_label)
+        label[current_label-1] = node
+        return current_label-1
+
+    def topological_sort(self):
+        visited = dict.fromkeys(self.nodes, False)
+        # store all nodes in topological order, the index is the position
+        label = [None] * len(self.nodes)
+        # keep track of ordering
+        current_label = len(self.nodes)
+        for node in self.nodes:
+            if not visited[node]:
+                current_label = self.topological_util(
+                    node, visited, label, current_label)
+        return label
 
     def shortest_path_bfs(self, start, end):
         visited = dict.fromkeys(self.nodes, False)
@@ -153,3 +186,7 @@ if __name__ == "__main__":
     print("depth first search: ", graph.BFS(1))
     print("breadth first search: ", graph.DFS(1))
     print("recursive breadth first search: ", graph.DFS_recur(1))
+
+    diGraph = Graph(True)
+    diGraph.add_edges([('s', 'v'), ('v', 't'), ('s', 'w'), ('w', 't')])
+    print(diGraph.topological_sort())
