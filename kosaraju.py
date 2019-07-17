@@ -100,4 +100,7 @@ if __name__ == "__main__":
         print(sorted(res.values(), reverse=True)[:5])
 
     thread = threading.Thread(target=main)
+    thread.setDaemon(True)
     thread.start()
+    thread.join()  # wait till kosaraju thread finishes
+    print("END")  # back to the main thread
