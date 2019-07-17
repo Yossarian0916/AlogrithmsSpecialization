@@ -96,7 +96,7 @@ class Graph:
         return bfs
 
     def DFS(self, start):
-        """implement depth-first-search using stack"""
+        """depth-first-search using stack"""
         dfs = list()  # output result
         visited = dict.fromkeys(self.nodes, False)
         S = list()
@@ -111,15 +111,15 @@ class Graph:
                     visited[edge] = True
         return dfs
 
-    def DFS_util(self, node, visited, dfs):
-        visited[node] = True
-        dfs.append(node)
-        for edge in self.graph[node]:
+    def DFS_util(self, start, visited, dfs):
+        visited[start] = True
+        dfs.append(start)
+        for edge in self.graph[start]:
             if not visited[edge]:
                 self.DFS_util(edge, visited, dfs)
 
-    def DFS_recur(self, start):
-        """resursive version of depth-first-search"""
+    def DFS_recur(self):
+        """resursive depth-first-search on whole graph"""
         visited = dict.fromkeys(self.nodes, False)
         dfs = list()  # output result
         for node in self.nodes:
@@ -180,9 +180,10 @@ if __name__ == "__main__":
                      (5, 6), (4, 5), (1, 7), (4, 7)])
     print("depth first search: ", graph.BFS(1))
     print("breadth first search: ", graph.DFS(1))
-    print("recursive breadth first search: ", graph.DFS_recur(1))
+    print("recursive breadth first search: ", graph.DFS_recur())
 
     diGraph = Graph(True)
     diGraph.add_edges([('a', 'b'), ('a', 'g'), ('b', 'c'),
-                       ('g', 'c'), ('c', 'd'), ('c', 'f'), ('d', 'e'), ('d', 'f')])
+                       ('g', 'c'), ('c', 'd'), ('c', 'f'),
+                       ('d', 'e'), ('d', 'f')])
     print(diGraph.topological_sort())

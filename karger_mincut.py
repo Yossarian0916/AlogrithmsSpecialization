@@ -2,26 +2,6 @@ from collections import defaultdict
 import random
 
 
-class Graph:
-    def __init__(self, adj_list):
-        self.graph = adj_list
-
-    @property
-    def nodes(self):
-        nodes = list()
-        for node in self.graph.keys():
-            nodes.append({node})
-        return nodes
-
-    @property
-    def edges(self):
-        edges = list()
-        for start, endpoints in self.graph.items():
-            for endpoint in endpoints:
-                edges.append((start, endpoint))
-        return edges
-
-
 def karger_mincut(graph):
     while len(graph.keys()) > 2:
         u = random.choice(list(graph.keys()))
@@ -61,10 +41,9 @@ def main(graph, minimum=None):
 if __name__ == "__main__":
     adj_list = defaultdict(list)
     with open("kargerMinCut.txt", "r") as f:
-        text = f.read().splitlines()
-        for line in text:
+        for line in f.readlines():
             line = list(map(int, line.split('\t')[:-1]))
             for i in range(1, len(line)):
                 adj_list[line[0]].append(line[i])
 
-    test = Graph(adj_list)
+    print(main(adj_list))  # correct answer: 17
