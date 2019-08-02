@@ -86,14 +86,15 @@ class Graph:
 
 
 if __name__ == "__main__":
-    # G = Graph(edges=[('a', 'b'), ('b', 'c'), ('c', 'a'), ('b', 'e'), ('e', 'f'),
-    #                  ('f', 'g'), ('g', 'e'), ('f', 'h'), ('h', 'i'), ('i', 'j'),
-    #                  ('j', 'h')])
+    # G = Graph(edges=[('a', 'b'), ('b', 'c'), ('c', 'a'), ('b', 'e'),
+    #                  ('e', 'f'), ('f', 'g'), ('g', 'e'), ('f', 'h'),
+    #                  ('h', 'i'), ('i', 'j'), ('j', 'h')])
     # print(G.kosaraju())
 
     def main():
         G = Graph()
         with open("SCC.txt", "r") as f:
+            # 875714 nodes, 5105043 edges in SCC.txt
             for edge in f.readlines():
                 G.add_edge(edge.split())
         res = G.kosaraju()
@@ -103,4 +104,4 @@ if __name__ == "__main__":
     thread.setDaemon(True)
     thread.start()
     thread.join()  # wait till kosaraju thread finishes
-    print("END")  # back to the main thread
+    print("END")  # back to the process
