@@ -6,7 +6,7 @@ merge sort implemented in python
 def merge(A, p, q, r):
     # copy of sorted subarrays
     L = A[p:q+1]
-    R = A[q+1:]
+    R = A[q+1:r+1]
     # add a sentinel value at the end of the array
     L.append(float('inf'))
     R.append(float('inf'))
