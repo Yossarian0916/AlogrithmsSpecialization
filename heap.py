@@ -7,6 +7,14 @@ class Heap:
         self.heapsize = 0
         self.heap = list(array)
 
+    def __str__(self):
+        return str(self.heap)
+
+    __repr__ = __str__
+
+    def __len__(self):
+        return self.heapsize
+
     def parent(self, index):
         return int(floor(index/2))-1
 
@@ -54,18 +62,25 @@ class Heap:
         for i in range(mid_id, -1, -1):
             self.min_heapify(i)
 
-    def heapify(self, order):
+    @staticmethod
+    def heapify(array, order):
+        heap = Heap(array)
         if order == 'max':
-            self.build_max_heap()
-            return self.heap
+            heap.build_max_heap()
+            return heap
         elif order == 'min':
-            self.build_min_heap()
-            return self.heap
+            heap.build_min_heap()
+            return heap
         else:
             print('please enter \'max\' or \'min\'')
+
+    def increase_heapsize(self, n):
+        self.heapsize = self.heapsize + n
+
+    def decrease_heapsize(self, n):
+        self.heapsize = self.heapsize - n
 
 
 if __name__ == "__main__":
     lst = [4, 1, 3, 2, 16, 9, 10, 14, 8, 7]
-    heap = Heap(lst)
-    print(heap.heapify('max'))
+    print(Heap.heapify(lst, 'max'))
