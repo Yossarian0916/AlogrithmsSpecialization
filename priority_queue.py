@@ -14,16 +14,32 @@ class Heapq:
         else:
             raise ValueError
 
+    def __str__(self):
+        return str(self.heapq)
+
+    __repr__ = __str__
+
+    def __len__(self):
+        return self.heapsize
+
+    @staticmethod
+    def heapify(array, order):
+        heapq = Heapq(array, order)
+        return heapq
+
+    def is_empty(self):
+        return self.heapsize == 0
+
     def left(self, index):
-        """return index of left child node"""
+        """return index of left child node, zero-based indexing"""
         return 2*(index+1)-1
 
     def right(self, index):
-        """return index of right child node"""
+        """return index of right child node, zero-based indexing"""
         return 2*(index+1)
 
     def parent(self, index):
-        """return index of the parent node"""
+        """return index of the parent node, zero-based indexing"""
         return int(floor(index/2))-1
 
     def max_heapify(self, index):
@@ -42,8 +58,8 @@ class Heapq:
 
     def build_max_heap(self):
         self.heapsize = self.length
-        mindex_index = int(floor(self.heapsize/2))-1
-        for i in range(mindex_index, -1, -1):
+        mid_id = int(floor(self.heapsize/2))-1
+        for i in range(mid_id, -1, -1):
             self.max_heapify(i)
 
     def min_heapify(self, index):
@@ -62,8 +78,8 @@ class Heapq:
 
     def build_min_heap(self):
         self.heapsize = self.length
-        mindex_index = int(floor(self.heapsize/2))-1
-        for i in range(mindex_index, -1, -1):
+        mid_id = int(floor(self.heapsize/2))-1
+        for i in range(mid_id, -1, -1):
             self.min_heapify(i)
 
     def insert(self, key):
@@ -75,16 +91,26 @@ class Heapq:
             self.decrease_key(self.heapsize-1, key)
 
     def delete(self, i):
-        if self.heapq[i] > self.heapq[self.heapsize-1]:
-            self.heapq[i] = self.heapq[self.heapsize-1]
-            self.max_heapify(i)
-        else:
-            self.increase_key(i, self.heapq[self.heapsize-1])
+        if self.order == 'max':
+            if self.heapq[i] > self.heapq[self.heapsize-1]:
+                self.heapq[i] = self.heapq[self.heapsize-1]
+                self.max_heapify(i)
+            else:
+                self.increase_key(i, self.heapq[self.heapsize-1])
+        elif self.order == 'min':
+            if self.heapq[i] < self.heapq[self.heapsize-1]:
+                self.heapq[i] = self.heapq[self.heapsize-1]
+                self.min_heapify(i)
+            else:
+                self.decrease_key(i, self.heapq[self.heapsize-1])
         # del self.heapq[self.heapsize-1]
         self.heapsize = self.heapsize - 1
 
     def increase_key(self, i, key):
-        """increases the value of element i's key to the new value key"""
+        """
+        increases the value of element i's key to the new value key,
+        for max-priority queue
+        """
         if key < self.heapq[i]:
             print('new key is smaller than current key')
             raise ValueError
@@ -94,7 +120,10 @@ class Heapq:
         self.headq[i] = key
 
     def decrease_key(self, i, key):
-        """decreases the value of element i's key to the new value key"""
+        """
+        decreases the value of element i's key to the new value key
+        for min-priority queue
+        """
         if key > self.heapq[i]:
             print('new key is greater than current key')
             raise ValueError
