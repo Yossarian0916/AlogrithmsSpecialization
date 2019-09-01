@@ -1,4 +1,4 @@
-"""3*floor(n-2) to find minimum and maximum at the same time"""
+"""3*floor(n/2) to find minimum and maximum at the same time"""
 
 
 def min_max(array):
