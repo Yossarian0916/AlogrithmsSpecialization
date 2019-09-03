@@ -1,10 +1,7 @@
-from math import floor
-
-
 class Heapq:
     def __init__(self, array, order):
         self.heapq = list(array)
-        self.length = len(self.heapq)  # number of elements in the array
+        self.length = len(array)  # number of elements in the array
         self.heapsize = 0  # how many elements in the heap are stored here
         self.order = order  # 'max' or 'min'
         if self.order == 'max':
@@ -40,7 +37,7 @@ class Heapq:
 
     def parent(self, index):
         """return index of the parent node, zero-based indexing"""
-        return int(floor(index/2))-1
+        return int((index-1)/2)
 
     def max_heapify(self, index):
         left = self.left(index)
@@ -58,7 +55,7 @@ class Heapq:
 
     def build_max_heap(self):
         self.heapsize = self.length
-        mid_id = int(floor(self.heapsize/2))-1
+        mid_id = int((self.heapsize)/2)-1
         for i in range(mid_id, -1, -1):
             self.max_heapify(i)
 
@@ -78,16 +75,17 @@ class Heapq:
 
     def build_min_heap(self):
         self.heapsize = self.length
-        mid_id = int(floor(self.heapsize/2))-1
+        mid_id = int((self.heapsize)/2)-1
         for i in range(mid_id, -1, -1):
             self.min_heapify(i)
 
     def insert(self, key):
-        self.heapq.append(float('-inf'))
         self.heapsize = self.heapsize + 1
         if self.order == 'max':
+            self.heapq.append(float('-inf'))
             self.increase_key(self.heapsize-1, key)
         elif self.order == 'min':
+            self.heapq.append(float('inf'))
             self.decrease_key(self.heapsize-1, key)
 
     def delete(self, i):
@@ -117,7 +115,7 @@ class Heapq:
         while i > 0 and self.heapq[self.parent(i)] < key:
             self.heapq[i] = self.heapq[self.parent(i)]
             i = self.parent(i)
-        self.headq[i] = key
+        self.heapq[i] = key
 
     def decrease_key(self, i, key):
         """

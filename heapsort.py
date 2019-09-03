@@ -25,7 +25,7 @@ def heapsort(array):
         # move the maximum to the end of the array
         heap[0], heap[i] = heap[i], heap[0]
         heapsize = heapsize - 1
-        max_heapify(heap, 0, heapsize)  # float down the root
+        max_heapify(heap, 0, heapsize)  # keep max binary heap property
     return heap
 
 

@@ -1,5 +1,4 @@
 from collections import defaultdict
-from math import floor
 
 
 class MinPQ:
@@ -22,7 +21,7 @@ class MinPQ:
         return 2*idx+2
 
     def _parent(self, idx):
-        return floor((idx-1)/2)
+        return int((idx-1)/2)
 
     def _min_heapify(self, idx):
         left = self._left(idx)
@@ -38,7 +37,7 @@ class MinPQ:
 
     def _build_min_heap(self):
         self._heapsize = self._length
-        mid_id = int(self._heapsize-1)-1
+        mid_id = int((self._heapsize)/2)-1
         for i in range(mid_id, -1, -1):
             self._min_heapify(i)
 
@@ -49,6 +48,8 @@ class MinPQ:
         self._minheap[idx] = new_key
 
     def extract_min(self):
+        if self._heapsize < 1:
+            raise IndexError
         minimum = self._minheap[0]
         self._minheap[0] = self._minheap[self._heapsize-1]
         self._heapsize = self._heapsize - 1
@@ -146,3 +147,4 @@ if __name__ == "__main__":
     res = dijkstra(digraph, '1')
     print(res['7'], res['37'], res['59'], res['82'], res['99'], res['115'],
           res['133'], res['165'], res['188'], res['197'])
+    # answer: 2599, 2610, 2947, 2052, 2367, 2399, 2029, 2442, 2505, 3068
