@@ -2,15 +2,18 @@ from priority_queue import Heapq
 
 
 def median_in_time(array, idx, median, lower, higher):
-    """idx is zero based"""
-    new = array[idx]
+    """
+    find the median in a dynamic way, read the elements one by one, and then 
+    return the median of the current subarray
+    """
+    new_item = array[idx]
     if idx == 0:
-        median = new
+        median = new_item
 
-    if new >= median:
-        higher.insert(new)
-    elif new < median:
-        lower.insert(new)
+    if new_item >= median:
+        higher.insert(new_item)
+    elif new_item < median:
+        lower.insert(new_item)
 
     length = idx+1
     if length % 2 != 0:
