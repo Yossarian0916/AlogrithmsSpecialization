@@ -1,5 +1,6 @@
 class Queue:
     def __init__(self, length):
+        """a queue of at most n elements using an array[1...n+1]"""
         self.length = length
         self.queue = [None]*(length+1)
         self.head = 0
