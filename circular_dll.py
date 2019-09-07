@@ -6,8 +6,9 @@ class Node:
 
 
 class CircularDLL:
+    """using sentinel implement a circurlar doubly linked list"""
+
     def __init__(self):
-        # sentinel
         self.sentinel = Node(None)
         self.sentinel.next = self.sentinel
         self.sentinel.prev = self.sentinel
