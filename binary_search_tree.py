@@ -38,6 +38,11 @@ class BinarySearchTree:
             trailing_parent.left = node
 
     def transplant(self, replaced, to_plant):
+        """
+        replaced node's parent becomes to_plant node's parent,
+        not attempt to update to_plant.left or to_plant.right,
+        it's the resposibility of transplant's caller
+        """
         if replaced.parent is None:
             self.root = to_plant
         elif replaced == replaced.parent.left:
@@ -94,7 +99,7 @@ class BinarySearchTree:
             parent = parent.parent
         return parent
 
-    def inorder_tree_walk(self, node):
+    def inorder_recursive(self, node):
         """recursive inorder tree traversal"""
         if node is not None:
             self.inorder_tree_walk(node.left)
@@ -116,11 +121,17 @@ class BinarySearchTree:
             else:
                 break
 
-    def morris_traversal(self, node):
-        """nonrecursive inorder traversal without stack"""
-        pass
+    def morris_inorder_traversal(self, node):
+        """
+        nonrecursive inorder traversal, finds the minimum element in the tree,
+        then makes successive calls to find successor util null
+        """
+        pointer = self.minimum(node)
+        while pointer is not None:
+            successor = self.succ(pointer)
+            print(pointer.data, '-> ', end='')
 
-    def preorder_tree_walk(self, node):
+    def preorder_recursive(self, node):
         """recursive preorder tree traversal"""
         if node is not None:
             print(node.data, '-> ', end='')
@@ -139,7 +150,7 @@ class BinarySearchTree:
             if current.left is not None:
                 stack.append(current.left)
 
-    def postorder_tree_walk(self, node):
+    def postorder_recursive(self, node):
         """recursive postorder tree traversal"""
         if node is not None:
             self.inorder_tree_walk(node.left)
@@ -147,7 +158,40 @@ class BinarySearchTree:
             print(node.data, '-> ', end='')
 
     def postorder_iterative(self, node):
-        pass
+        """using two stacks"""
+        stack_util = list()
+        stack_reverse = list()
+        stack_util.append(node)
+        while len(stack_util) > 0:
+            current = stack_util.pop()
+            stack_reverse.append(current)
+            if current.left is not None:
+                stack_util.append(current.right)
+            if current.right is not None:
+                stack_util.append(current.right)
+
+        while stack_reverse:
+            node = stack_reverse.pop()
+            print(node.data, '-> ', end='')
+
+    def postorder_iterative2(self, node):
+        """using only one stack"""
+        stack = list()
+        while True:
+            while node is not None:
+                if node.right is not None:
+                    stack.append(node.right)
+                stack.append(node)
+                node = node.left
+            popped = stack.pop()
+            if popped.right == stack[-1]:
+                node = stack.pop()
+                stack.push(popped)
+            else:
+                print(popped.data, '-> ', end='')
+
+            if len(stack) <= 0:
+                break
 
 
 if __name__ == "__main__":
