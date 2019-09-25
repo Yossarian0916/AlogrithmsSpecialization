@@ -58,7 +58,7 @@ class BinarySearchTree:
         elif node.right is None:
             self.transplant(node, node.left)
         else:
-            succ = self.succ(node)
+            succ = self.minimum(node.right)
             if succ.parent != node:
                 self.transplant(succ, succ.right)
                 succ.right = node.right
