@@ -1,3 +1,6 @@
+"""median of medians, select algorithm whose worst-case running time is O(n)"""
+
+
 def Dselect(array, n):
     pivot = choose_pivot(array, len(array))
     p = partition(array, array.index(pivot))
