@@ -123,13 +123,30 @@ class BinarySearchTree:
 
     def morris_inorder_traversal(self, node):
         """
-        nonrecursive inorder traversal, finds the minimum element in the tree,
-        then makes successive calls to find successor util null
+        based on threaded binary tree, make each node as its predecessor's 
+        right child
+        time: O(n), space: O(1)
         """
-        pointer = self.minimum(node)
-        while pointer is not None:
-            successor = self.succ(pointer)
-            print(pointer.data, '-> ', end='')
+        while node is not None:
+            if node.left is None:
+                print(node.key, '-> ', end=' ')
+                node = node.right
+            else:
+                # find the current node's predecessor in its left subtree
+                # pre.right != node, it is to prevent from visiting already
+                # marked current's predecessor once more
+                pre = node.left
+                while pre.right is not None and pre.right != node:
+                    pre = pre.right
+                # make the current node as the right child of its predecessor
+                if pre.right is None:
+                    pre.right = node
+                    node = node.left
+                # revert the change made, fix the right child of the predecessor
+                else:
+                    pre.right = None
+                    print(node.key, '-> ', end=' ')
+                    node = node.right
 
     def preorder_recursive(self, node):
         """recursive preorder tree traversal"""
