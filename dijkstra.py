@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 
-class MinPQ:
+class PriorityQueue:
     """
     each heap element is in form (key value, object handle), while heap
     operations works based on comparing key value and object handle points to
@@ -57,6 +57,10 @@ class MinPQ:
         return minimum
 
     def insert(self, item):
+        if item in self._minheap:
+            idx = self._minheap.index(item)
+            del self._minheap[idx]
+            self._heapsize = self._heapsize - 1
         self._minheap.append(item)
         self._heapsize = self._heapsize + 1
         self.decrease_key(self._heapsize-1, item)
@@ -108,28 +112,20 @@ class DiGraph:
         return None
 
 
-def relax(min_heapq, dist, graph, u, v):
-    if dist[v] > dist[u] + graph.weight(u, v):
-        dist[v] = dist[u] + graph.weight(u, v)
-        min_heapq.insert((dist[v], v))
-
-
 def dijkstra(graph, start):
     # initialize
     dist = dict.fromkeys(graph.nodes, float('inf'))
     dist[start] = 0
-    min_heapq = MinPQ()
-    min_heapq.insert((0, start))
+    min_pq = PriorityQueue()
+    min_pq.insert((0, start))
 
-    while not min_heapq.is_empty():
-        distance, u = min_heapq.extract_min()
-        # we may add a node multiple time in priority queue, but we process it
-        # only once
-        if distance > dist[u]:
-            continue
-        for neighbor, weight in graph.adj_list[u]:
-            relax(min_heapq, dist, graph, u, neighbor)
-
+    while not min_pq.is_empty():
+        distance, node = min_pq.extract_min()
+        # insert or update distance
+        for neighbor, weight in graph.adj_list[node]:
+            if dist[neighbor] > dist[node] + graph.weight(node, neighbor):
+                dist[neighbor] = dist[node] + graph.weight(node, neighbor)
+                min_pq.insert((dist[neighbor], neighbor))
     return dist
 
 

@@ -11,9 +11,8 @@ def bubble_sort(array):
             print(array)
 
 
-def short_bubble_sort(lst):
+def short_bubble_sort(array):
     """sort in incremental order, stop early if there is no exchange needed"""
-    array = lst.copy()
     n = len(array)
     for i in range(n):
         swapped = False
@@ -28,6 +27,6 @@ def short_bubble_sort(lst):
 
 
 if __name__ == '__main__':
-    lst = [1, 3, 5, 0, 2, 4, 6]
-    sorted_lst = short_bubble_sort(lst)
-    print(sorted_lst)
+    lst = [1, 2, 3, 5, 0, 2, 4, 6]
+    short_bubble_sort(lst)
+    print(lst)
