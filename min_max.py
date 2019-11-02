@@ -2,15 +2,13 @@
 
 
 def min_max(array):
+    # init min, max
     if len(array) % 2 == 0:
-        # init min, max
         min = array[0] < array[1] and array[0] or array[1]
         max = array[0] > array[1] and array[0] or array[1]
-        return compare_pairs(array, 2)
     elif len(array) % 2 != 0:
-        # init min, max
         min = max = array[0]
-        return compare_pairs(array, 2)
+    return compare_pairs(array, 2)
 
 
 def compare_pairs(array, start):
