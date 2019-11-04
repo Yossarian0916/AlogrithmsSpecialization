@@ -1,33 +1,35 @@
-"""using python standard library heapq module"""
-import heapq
+"""using my own implementation of priority queue"""
+from priorityQ import MaxHeap, MinHeap
 
 
-def median_in_time(item, heap_low=[], heap_high=[]):
+def median_in_time(item, heap_low, heap_high):
     """
     find the median in a dynamic way, read the elements one by one, and then
     return the median of the current subarray
     """
     if len(heap_low) == 0:
-        heapq.heappush(heap_low, -item)
+        heap_low.insert(item)
     else:
-        median = -heap_low[0]
+        median = heap_low.maximum()
         if item > median:
-            heapq.heappush(heap_high, item)
+            heap_high.insert(item)
             if len(heap_high) > len(heap_low):
-                tmp = heapq.heappop(heap_high)
-                heapq.heappush(heap_low, -tmp)
+                tmp = heap_high.extract_min()
+                heap_low.insert(tmp)
         else:
-            heapq.heappush(heap_low, -item)
+            heap_low.insert(item)
             if len(heap_low) - len(heap_high) > 1:
-                tmp = heapq.heappop(heap_low)
-                heapq.heappush(heap_high, -tmp)
-    return -heap_low[0]
+                tmp = heap_low.extract_max()
+                heap_high.insert(tmp)
+    return heap_low.maximum()
 
 
 def median_maintenance(array):
     medians = []
+    heap_low = MaxHeap([])
+    heap_high = MinHeap([])
     for item in array:
-        median = median_in_time(item)
+        median = median_in_time(item, heap_low, heap_high)
         medians.append(median)
     return medians
 
