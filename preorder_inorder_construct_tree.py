@@ -14,10 +14,9 @@ class BuildTree:
         self.root = self.build_tree(0, len(inorder)-1)
 
     def build_tree(self, inStart, inEnd):
-        # terminate
+        # terminate condition
         if inStart > inEnd:
             return
-
         root = Node(key=self.preorder[self.preIdx])
         # pick the next node in preorder traversal as the next root
         self.preIdx += 1
@@ -31,27 +30,30 @@ class BuildTree:
         root.right = self.build_tree(inIdx+1, inEnd)
         return root
 
-    def inorder_traversal(self, node):
+    def inorder_traversal(self, node, inorder=[]):
         if node is not None:
-            self.inorder_traversal(node.left)
-            print(node.key, '->', end=' ')
-            self.inorder_traversal(node.right)
+            inorder = self.inorder_traversal(node.left)
+            inorder.append(node.key)
+            inorder = self.inorder_traversal(node.right)
+        return inorder
 
-    def preorder_traversal(self, node):
+    def preorder_traversal(self, node, preorder=[]):
         if node is not None:
-            print(node.key, '->', end=' ')
-            self.preorder_traversal(node.left)
-            self.preorder_traversal(node.right)
+            preorder.append(node.key)
+            preorder = self.preorder_traversal(node.left)
+            preorder = self.preorder_traversal(node.right)
+        return preorder
 
-    def print(self, order):
+    def traversal(self, order):
         if order == 'inorder':
-            self.inorder_traversal(self.root)
+            print(self.inorder_traversal(self.root))
         elif order == 'preorder':
-            self.preorder_traversal(self.root)
+            print(self.preorder_traversal(self.root))
 
 
 if __name__ == '__main__':
     preorder = [1, 2, 4, 5, 7, 8, 3, 6]
     inorder = [4, 2, 7, 5, 8, 1, 3, 6]
     tree = BuildTree(preorder, inorder)
-    tree.print('inorder')
+    tree.traversal(order='inorder')
+    tree.traversal(order='preorder')
