@@ -1,6 +1,7 @@
 """implementation of bloom filter"""
 import hashlib
 import math
+import random
 
 from bitarray import bitarray
 
@@ -20,15 +21,15 @@ class BloomFilter:
 
     def add(self, item):
         for i in range(self.hash_fn_num):
-            digest = self.hashing(item) % self.arraysize
-            if self.bitarray[digest] == False:
+            digest = self.hashing(item, i) % self.arraysize
+            if not self.bitarray[digest]:
                 return False
         return True
 
     def __contains__(self, item):
         digest = list()
         for i in range(self.hash_fn_num):
-            digest = self.hashing(item) % self.arraysize
+            digest = self.hashing(item, i) % self.arraysize
             digest.append(digest)
         return sum(self.bitarray[digest]) == self.hash_fn_num
 
@@ -54,10 +55,13 @@ class BloomFilter:
         return int(k)
 
     def hash_fn(self):
-        def generate_hash(key):
-            m = hashlib.md5()
-            m.update(str(key).encode('utf-8'))
-            return int(m.hexdigest, 16)
+        def generate_hash(key, seed):
+            # with different seed, it generates different digest for the key
+            # even using the same md5 hash function under the hood all the time
+            random.seed(seed)
+            key = key + str(random.random())
+            m = hashlib.md5(str(key).encode('utf-8'))
+            return int(m.hexdigest(), 16)
         return generate_hash
 
     def is_same_cfg(self, other):
