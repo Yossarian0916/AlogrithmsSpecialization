@@ -102,9 +102,9 @@ class BinarySearchTree:
     def inorder_recursive(self, node):
         """recursive inorder tree traversal"""
         if node is not None:
-            self.inorder_tree_walk(node.left)
+            self.inorder_recursive(node.left)
             print(node.data, '-> ', end='')
-            self.inorder_tree_walk(node.right)
+            self.inorder_recursive(node.right)
 
     def inorder_iterative(self, node):
         """nonrecursive inorder traversal using one stack"""
@@ -152,8 +152,8 @@ class BinarySearchTree:
         """recursive preorder tree traversal"""
         if node is not None:
             print(node.data, '-> ', end='')
-            self.inorder_tree_walk(node.left)
-            self.inorder_tree_walk(node.right)
+            self.preorder_recursive(node.left)
+            self.preorder_recursive(node.right)
 
     def preorder_iterative(self, node):
         """nonrecursive preorder traversal using one stack"""
@@ -170,8 +170,8 @@ class BinarySearchTree:
     def postorder_recursive(self, node):
         """recursive postorder tree traversal"""
         if node is not None:
-            self.inorder_tree_walk(node.left)
-            self.inorder_tree_walk(node.right)
+            self.postorder_recursive(node.left)
+            self.postorder_recursive(node.right)
             print(node.data, '-> ', end='')
 
     def postorder_iterative(self, node):

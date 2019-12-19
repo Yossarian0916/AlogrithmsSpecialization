@@ -118,11 +118,17 @@ def dijkstra(graph, start):
     dist[start] = 0
     min_pq = PriorityQueue()
     min_pq.insert((0, start))
+    seen = list()
 
     while not min_pq.is_empty():
         distance, node = min_pq.extract_min()
-        # insert or update distance
+        if node in seen:
+            continue
+        seen.append(node)
+        # update distance for not visited nodes
         for neighbor, weight in graph.adj_list[node]:
+            if neighbor in seen:
+                continue
             if dist[neighbor] > dist[node] + graph.weight(node, neighbor):
                 dist[neighbor] = dist[node] + graph.weight(node, neighbor)
                 min_pq.insert((dist[neighbor], neighbor))
