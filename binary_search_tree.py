@@ -123,7 +123,7 @@ class BinarySearchTree:
 
     def morris_inorder_traversal(self, node):
         """
-        based on threaded binary tree, make each node as its predecessor's 
+        based on threaded binary tree, make each node as its predecessor's
         right child
         time: O(n), space: O(1)
         """

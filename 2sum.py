@@ -34,8 +34,8 @@ def count_sum_values(array, lower_bound, upper_bound):
 
 if __name__ == '__main__':
     array = list()
-    with open('2sum.txt', 'r') as fd:
-        for line in fd:
+    with open('2sum.txt', 'r') as f:
+        for line in f.read().splitlines():
             array.append(int(line))
 
     res = count_sum_values(sorted(array), -10000, 10000)

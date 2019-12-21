@@ -38,7 +38,7 @@ def count_inversion(array):
     return a + b + c
 
 
-def test_case():
+def read_input():
     with open('IntegerArray.txt', 'r') as f:
         while True:
             try:
@@ -50,7 +50,10 @@ def test_case():
 
 if __name__ == '__main__':
     with open('IntegerArray.txt', 'r') as f:
-        inputs = list(map(int, f.read().splitlines()))
+        inputs = list()
+        for line in f.readlines():
+            inputs.append(int(line))
 
+    print(len(inputs))
     res = count_inversion(inputs)
-    print(res)
+    print(res)  # 2407905288

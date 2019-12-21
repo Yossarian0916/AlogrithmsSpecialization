@@ -55,7 +55,6 @@ if __name__ == "__main__":
     with open('QuickSort.txt', 'r') as f:
         data = f.read().splitlines()
         lst = list(map(int, data))
-    # output
 
     def is_sorted(iter):
         return all(iter[i] <= iter[i+1] for i in range(len(iter)-1))
