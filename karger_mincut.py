@@ -2,33 +2,41 @@ from collections import defaultdict
 import random
 
 
-def karger_mincut(graph, min_v=2):
-    while len(graph.keys()) > min_v:
-        u = random.choice(list(graph.keys()))
-        v = random.choice(graph[u])
-        merge(graph, u, v)
-    return len(list(graph.values())[0])
+def karger_mincut(input_graph):
+    nodes_num = len(input_graph.keys())
+    min_cut = float("inf")
+    # theoretically, karger_mincut should loop for (n**2)*ln(n)
+    for _ in range(nodes_num):
+        # each time calculate minimum cut on a shallow copy graph
+        graph = input_graph.copy()
+        while len(graph.keys()) > 2:
+            # pick a random edge from the graph
+            u = random.choice(list(graph.keys()))
+            v = random.choice(graph[u])
+            # merge endpoints, remove end vertex
+            graph[u] = graph[u] + graph[v]
+            del graph[v]
+            # replace vertex v with vertex u
+            for key in graph.keys():
+                graph[key] = [u if node == v else node for node in graph[key]]
+            # remove self-loop
+            graph[u] = [node for node in graph[u] if node != u]
+        cut_edge_num = len(list(graph.values())[0])
+        if cut_edge_num < min_cut:
+            min_cut = cut_edge_num
+    return min_cut
 
 
-def merge(graph, u, v):
-    graph[u] = graph[u] + graph[v]
-    # merge endpoints, remove end vertex
-    del graph[v]
-    # replace vertex v with vertex u
-    for key, value in graph.items():
-        graph[key] = [u if node == v else node for node in graph[key]]
-    # remove self-loop
-    graph[u] = [node for node in graph[u] if node != u]
-
-
-def main(graph, minimum=None):
-    for _ in range(200**3):
-        try:
-            if karger_mincut(graph) < minimum:
-                minimum = karger_mincut(graph)
-        except TypeError:
-            minimum = karger_mincut(graph)
-    return minimum
+def random_edge(graph):
+    edges = list()
+    visited = dict.fromkeys(list(graph.keys()), False)
+    for source, neighbors in graph.items():
+        for end in neighbors:
+            if not visited[end]:
+                visited[end] = True
+                # for better randomness, change end, source node order
+                edges.append((end, source))
+    return random.choice(edges)
 
 
 if __name__ == "__main__":
@@ -39,4 +47,4 @@ if __name__ == "__main__":
             for i in range(1, len(line)):
                 graph[line[0]].append(line[i])
 
-    print(main(graph))  # correct answer: 17
+    print(karger_mincut(graph))  # correct answer: 17
