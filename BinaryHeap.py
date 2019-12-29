@@ -1,11 +1,8 @@
-class PriorityQueue:
+class BinaryHeap:
     def __init__(self, array):
         self.heap = list(array)
         self.length = len(array)  # number of elements in the array
         self.heapsize = 0  # how many elements in the heap are stored here
-
-    def is_empty(self):
-        return self.heapsize == 0
 
     def left(self, index):
         """return index of left child node, zero-based indexing"""
@@ -19,6 +16,9 @@ class PriorityQueue:
         """return index of the parent node, zero-based indexing"""
         return int((index-1)/2)
 
+    def is_empty(self):
+        return self.heapsize == 0
+
     def __str__(self):
         return str(self.heap)
 
@@ -27,8 +27,13 @@ class PriorityQueue:
     def __len__(self):
         return self.heapsize
 
+    def __contains__(self, key):
+        if key in self.heap:
+            return True
+        return False
 
-class MinHeap(PriorityQueue):
+
+class MinHeap(BinaryHeap):
     def __init__(self, array):
         super(MinHeap, self).__init__(array)
         self.build_min_heap()
@@ -93,7 +98,7 @@ class MinHeap(PriorityQueue):
         return min_key
 
 
-class MaxHeap(PriorityQueue):
+class MaxHeap(BinaryHeap):
     def __init__(self, array):
         super(MaxHeap, self).__init__(array)
         self.build_max_heap()
@@ -161,8 +166,11 @@ class MaxHeap(PriorityQueue):
 if __name__ == "__main__":
     array = [10, 5, 2, 6, 3]
     minheap = MinHeap(array)
+    print(2 in minheap)
     minheap.insert(15)
     minheap.extract_min()
     print(minheap.heap)
     minheap.extract_min()
     print(minheap.heap)
+    print(2 in minheap)
+    print(10 in minheap)

@@ -1,5 +1,5 @@
 """using my own implementation of priority queue"""
-from priorityQ import MaxHeap, MinHeap
+from BinaryHeap import MaxHeap, MinHeap
 
 
 def median_in_time(item, heap_low, heap_high):
