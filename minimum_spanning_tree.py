@@ -50,14 +50,14 @@ class Graph:
                 edges.append((key, node, weight))
         return edges
 
-    def weight(self, source: Node, end: Node):
+    def weight(self, source: Node, end: Node) -> Float:
         for (node, weight) in self.adj_list[source]:
             if node == end:
                 return weight
         return None
 
 
-def mst_prim1(graph: Dict[Any, List], edge_cost: Dict[Tuple, Float]):
+def mst_prim1(graph: Dict[Int, List[Int]], edge_cost: Dict[Tuple[Int, Int], Float]):
     visited_node = set()
     min_spanning_tree = list()
     visited_edge = dict.fromkeys(graph.keys(), False)
@@ -84,10 +84,8 @@ def mst_prim(graph: Dict[Any, List], root: Node, weight: Dict[Tuple, Float]):
         u = Q.extract_min()
         for v in graph.adj_list[u]:
             if v in Q and weight[(u, v)] < v.key:
-                v.key = weight[(u, v)]
                 v.parent = u
-                # TODO: need a book-keeping to locate position of node v in min heap
-                # Q.decrease_key(v, v.key)
+                Q.decrease_key(v, v.key, weight[(u, v)])
 
 
 if __name__ == '__main__':
