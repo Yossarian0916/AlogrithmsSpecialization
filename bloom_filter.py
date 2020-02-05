@@ -3,8 +3,6 @@ import hashlib
 import math
 import random
 
-from bitarray import bitarray
-
 
 class BloomFilter:
     def __init__(self, capacity, prob_false_pos, hash_fn=None):
@@ -12,26 +10,26 @@ class BloomFilter:
         self.error_rate = prob_false_pos
         self.arraysize = self.calc_arraysize(capacity, prob_false_pos)
         self.hash_fn_num = self.calc_hash_num(capacity, prob_false_pos)
-        self.bitarray = bitarray(self.arraysize, endian='little')
-        self.bitarray.setall(False)
+        self.bitarray = [False] * self.arraysize
         if hash_fn is None:
             self.hashing = self.hash_fn()
         else:
             self.hashing = hash_fn
 
     def add(self, item):
+        digests = list()
+        for i in range(self.hash_fn_num):
+            digest = self.hashing(item, i) % self.arraysize
+            digests.append(digest)
+        for digest in digests:
+            self.bitarray[digest] = True
+
+    def __contains__(self, item):
         for i in range(self.hash_fn_num):
             digest = self.hashing(item, i) % self.arraysize
             if not self.bitarray[digest]:
                 return False
         return True
-
-    def __contains__(self, item):
-        digest = list()
-        for i in range(self.hash_fn_num):
-            digest = self.hashing(item, i) % self.arraysize
-            digest.append(digest)
-        return sum(self.bitarray[digest]) == self.hash_fn_num
 
     def calc_arraysize(self, capacity, prob_false_pos):
         """
@@ -50,7 +48,7 @@ class BloomFilter:
         m, the size of bitarray
         n, the number of items to be stored
         """
-        size = self.calc_arraysize
+        size = self.calc_arraysize(self.capacity, self.error_rate)
         k = math.log(2) * (size / self.capacity)
         return int(k)
 
@@ -65,9 +63,7 @@ class BloomFilter:
         return generate_hash
 
     def is_same_cfg(self, other):
-        return (self.error_rate == other.error_rate
-                and self.arraysize == other.arraysize
-                and self.hashing == other.hashing)
+        return (self.error_rate == other.error_rate and self.arraysize == other.arraysize and self.hashing == other.hashing)
 
     def union(self, other):
         if self.is_same_cfg(other):
@@ -85,10 +81,32 @@ class BloomFilter:
 
 
 if __name__ == '__main__':
-    states = '''Alabama Alaska Arizona Arkansas California Colorado Connecticut
+    from random import shuffle
+    usa_states = '''Alabama Alaska Arizona Arkansas California Colorado Connecticut
         Delaware Florida Georgia Hawaii Idaho Illinois Indiana Iowa Kansas
         Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota
         Mississippi Missouri Montana Nebraska Nevada NewHampshire NewJersey
         NewMexico NewYork NorthCarolina NorthDakota Ohio Oklahoma Oregon
         Pennsylvania RhodeIsland SouthCarolina SouthDakota Tennessee Texas Utah
         Vermont Virginia Washington WestVirginia Wisconsin Wyoming'''.split()
+
+    china_states = '''Beijing Shanghai Shenzhen Taiwan Hongkong Hangzhou Guangzhou
+                      Liaoning Suzhou Harbin Jilin Sichuan Xinjiang Jiangxi Chongqing
+                      '''.split()
+
+    bloom_filter = BloomFilter(56, 0.1)
+    for state in usa_states:
+        bloom_filter.add(state)
+
+    shuffle(usa_states)
+    shuffle(china_states)
+    test_set = usa_states[:20] + china_states
+    shuffle(test_set)
+    for state in test_set:
+        if state in bloom_filter:
+            if state in china_states:
+                print('{} is a false positive'.format(state))
+            else:
+                print('{} is present'.format(state))
+        else:
+            print('{} is definitely not present'.format(state))

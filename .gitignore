@@ -2,6 +2,6 @@
 .idea/
 .ipynb_checkpoints/
 .algo1slides/
+.algo2slides/
 __pycache__/
-algo1slides/
-.pdf
+**/*.pdf
