@@ -19,7 +19,8 @@ def count_split_inv(array, left, right):
             i += 1
         else:
             array[k] = right[j]
-            count += len(left) - 1 - i
+            # len(left) counts the additional sentinal 'inf'
+            count += len(left) - i - 1
             j += 1
     return count
 
@@ -28,13 +29,13 @@ def count_inversion(array):
     """divide and conquer to count the inversion in an array"""
     if len(array) == 1:
         return 0
-    else:
-        mid = len(array) // 2
-        left = array[:mid]
-        right = array[mid:]
-        a = count_inversion(left)
-        b = count_inversion(right)
-        c = count_split_inv(array, left, right)
+
+    mid = len(array) // 2
+    left = array[:mid]
+    right = array[mid:]
+    a = count_inversion(left)
+    b = count_inversion(right)
+    c = count_split_inv(array, left, right)
     return a + b + c
 
 
