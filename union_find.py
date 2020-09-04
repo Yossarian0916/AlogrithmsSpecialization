@@ -6,7 +6,7 @@ class DisjointSet:
 
     def __init__(self, array):
         self.make_set(array)
-        self.count = len(array)  # num of different union sets
+        self.count = len(array)  # size of disjoint components
 
     def make_set(self, array):
         self.parent = {item: item for item in array}
@@ -23,11 +23,11 @@ class DisjointSet:
         return self.parent[x]
 
     def union(self, x, y):
-        if not self.connected(x, y):
-            # each union, the num of differents sets reduce self by 1
-            self.count = self.count - 1
-            return self.link(self.find_set(x), self.find_set(y))
-        return None
+        if self.connected(x, y):
+            return
+        # each union, the num of differents sets reduce self by 1
+        self.count = self.count - 1
+        self.link(self.find_set(x), self.find_set(y))
 
     def link(self, x, y):
         if self.rank[x] > self.rank[y]:
@@ -40,13 +40,7 @@ class DisjointSet:
                 self.rank[y] = self.rank[y] + 1
 
     def connected(self, x, y):
-        return self.find_set(x) == self.find_set(y)
+        return (self.find_set(x) == self.find_set(y))
 
-    @property
-    def num_unions(self):
-        """count how many different union sets"""
+    def count(self):
         return self.count
-
-
-if __name__ == '__main__':
-    pass

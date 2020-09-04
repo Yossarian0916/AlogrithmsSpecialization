@@ -1,4 +1,9 @@
 class BinaryHeap:
+    """
+    define some common util functions for min-heap and max-heap,
+    this is not an interface class
+    """
+
     def __init__(self, array):
         self.heap = list(array)
         self.length = len(array)  # number of elements in the array

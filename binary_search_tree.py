@@ -110,16 +110,17 @@ class BinarySearchTree:
         """nonrecursive inorder traversal using one stack"""
         stack = list()
         current = node
-        while True:
-            if current is not None:
-                stack.append(current)
-                current = current.left
-            elif len(stack) > 0:
-                current = stack.pop()
-                print(current.data, '-> ', end='')
-                current = current.right
-            else:
-                break
+        while current is not None:
+            stack.append(current)
+            current = current.left
+
+        while stack:
+            current = stack.pop()
+            print(current.data, '-> ', end='')
+            n = current.right
+            while n is not None:
+                stack.append(n)
+                n = n.left
 
     def morris_inorder_traversal(self, node):
         """
@@ -183,7 +184,7 @@ class BinarySearchTree:
             current = stack_util.pop()
             stack_reverse.append(current)
             if current.left is not None:
-                stack_util.append(current.right)
+                stack_util.append(current.left)
             if current.right is not None:
                 stack_util.append(current.right)
 
@@ -200,14 +201,15 @@ class BinarySearchTree:
                     stack.append(node.right)
                 stack.append(node)
                 node = node.left
-            popped = stack.pop()
-            if popped.right == stack[-1]:
-                node = stack.pop()
-                stack.push(popped)
+            node = stack.pop()
+            if node.right == stack[-1] and node.right is not None:
+                stack.pop()
+                stack.push(node)
+                node = node.right
             else:
-                print(popped.data, '-> ', end='')
-
-            if len(stack) <= 0:
+                print(node.data, '-> ', end='')
+                node = None
+            if stack:
                 break
 
 
