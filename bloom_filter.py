@@ -94,7 +94,7 @@ if __name__ == '__main__':
                       Liaoning Suzhou Harbin Jilin Sichuan Xinjiang Jiangxi Chongqing
                       '''.split()
 
-    bloom_filter = BloomFilter(56, 0.1)
+    bloom_filter = BloomFilter(56, 0.05)
     for state in usa_states:
         bloom_filter.add(state)
 
@@ -105,8 +105,9 @@ if __name__ == '__main__':
     for state in test_set:
         if state in bloom_filter:
             if state in china_states:
-                print('{} is a false positive'.format(state))
+                print('{:15} false positive'.format(state))
             else:
-                print('{} is present'.format(state))
+                print('{:15} included'.format(state))
         else:
-            print('{} is definitely not present'.format(state))
+            print('{:15} not included'.format(state))
+
