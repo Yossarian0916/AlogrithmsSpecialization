@@ -76,56 +76,52 @@ class Graph:
         for edge in edges:
             self.remove_nodes(edge)
 
-    def BFS(self, start):
-        """implement breadth-first-search using queue"""
-        bfs = list()  # output result
-        # mark visited nodes
+    def bfs(self, v):
+        res = list()
         visited = dict.fromkeys(self.nodes, False)
-        # queue for BFS
         queue = deque(maxlen=len(self.nodes))
-        # init
-        queue.append(start)
-        visited[start] = True
-        while Q:
+        queue.append(v)
+        visited[v] = True
+        while queue:
             v = queue.popleft()
-            bfs.append(v)
+            res.append(v)
             for w in self.graph[v]:
                 if not visited[w]:
                     queue.append(w)
                     visited[w] = True
-        return bfs
+        return res
 
-    def DFS(self, start):
-        """depth-first-search using stack"""
-        dfs = list()  # output result
+    def dfs(self, v):
+        """nonrecursive depth-first-search using stack"""
         visited = dict.fromkeys(self.nodes, False)
+        res = list()
         stack = list()
-        stack.append(start)
+        stack.append(v)
         while stack:
             v = stack.pop()
-            dfs.append(v)
             if not visited[v]:
-                visited[v] = true;
+                visited[v] = True
+                res.append(v)
                 for w in self.graph[v]:
                     if not visited[w]:
                         stack.append(w)
-        return dfs
+        return res
 
-    def DFS_util(self, start, visited, dfs):
-        visited[start] = True
-        dfs.append(start)
-        for edge in self.graph[start]:
-            if not visited[edge]:
-                self.DFS_util(edge, visited, dfs)
+    def dfs_recursive(self, v, visited, res):
+        visited[v] = True
+        res.append(v)
+        for w in self.graph[v]:
+            if not visited[w]:
+                self.dfs_recursive(w, visited, res)
 
-    def DFS_recur(self):
-        """resursive depth-first-search on whole graph"""
+    def dfs_general(self):
+        """depth-first-search on graph, whether connected or not"""
         visited = dict.fromkeys(self.nodes, False)
-        dfs = list()  # output result
+        res = list()
         for node in self.nodes:
             if not visited[node]:
-                self.DFS_util(node, visited, dfs)
-        return dfs
+                self.dfs_recursive(node, visited, res)
+        return res
 
     def topological_util(self, node, visited, label):
         visited[node] = True
@@ -178,9 +174,9 @@ if __name__ == "__main__":
     graph = Graph()
     graph.add_edges([(1, 2), (2, 3), (2, 4), (3, 6),
                      (5, 6), (4, 5), (1, 7), (4, 7)])
-    print("depth first search: ", graph.BFS(1))
-    print("breadth first search: ", graph.DFS(1))
-    print("recursive breadth first search: ", graph.DFS_recur())
+    print("breadth first search: ", graph.bfs(1))
+    print("depth first search: ", graph.dfs(1))
+    print("recursive depth first search: ", graph.dfs_general())
 
     diGraph = Graph(True)
     diGraph.add_edges([('a', 'b'), ('a', 'g'), ('b', 'c'),
