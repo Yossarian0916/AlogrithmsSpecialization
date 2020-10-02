@@ -82,33 +82,33 @@ class Graph:
         # mark visited nodes
         visited = dict.fromkeys(self.nodes, False)
         # queue for BFS
-        Q = deque(maxlen=len(self.nodes))
+        queue = deque(maxlen=len(self.nodes))
         # init
-        Q.append(start)
+        queue.append(start)
         visited[start] = True
         while Q:
-            v = Q.popleft()
+            v = queue.popleft()
             bfs.append(v)
-            for edge in self.graph[v]:
-                if not visited[edge]:
-                    Q.append(edge)
-                    visited[edge] = True
+            for w in self.graph[v]:
+                if not visited[w]:
+                    queue.append(w)
+                    visited[w] = True
         return bfs
 
     def DFS(self, start):
         """depth-first-search using stack"""
         dfs = list()  # output result
         visited = dict.fromkeys(self.nodes, False)
-        S = list()
-        S.append(start)
-        visited[start] = True
-        while S:
-            v = S.pop()
+        stack = list()
+        stack.append(start)
+        while stack:
+            v = stack.pop()
             dfs.append(v)
-            for edge in self.graph[v]:
-                if not visited[edge]:
-                    S.append(edge)
-                    visited[edge] = True
+            if not visited[v]:
+                visited[v] = true;
+                for w in self.graph[v]:
+                    if not visited[w]:
+                        stack.append(w)
         return dfs
 
     def DFS_util(self, start, visited, dfs):
