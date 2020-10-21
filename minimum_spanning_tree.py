@@ -1,9 +1,8 @@
-"""implementation of Prim's algorithm to find a minimum spannning tree"""
 from collections import defaultdict
 from functools import total_ordering
 from typing import Float, List, Dict, Tuple, Any
-import random
 from BinaryHeap import MinHeap
+from union_find import DisjointSet
 
 
 @total_ordering
@@ -56,36 +55,29 @@ class Graph:
                 return weight
         return None
 
+    def mst_prim(self):
+        root.key = self.nodes[0]
+        Q = MinHeap(self.nodes)
+        while not Q.is_empty():
+            u = Q.extract_min()
+            for v in self.adj_list[u]:
+                if v in Q and self.weight[(u, v)] < v.key:
+                    v.parent = u
+                    Q.decrease_key(v.key, self.weight[(u, v)])
 
-def mst_prim1(graph: Dict[Int, List[Int]], edge_cost: Dict[Tuple[Int, Int], Float]):
-    visited_node = set()
-    min_spanning_tree = list()
-    visited_edge = dict.fromkeys(graph.keys(), False)
-    min_heap = MinHeap()
-    # init
-    start_node = random.choice(list(graph.keys()))
-    visited_node.add(start_node)
+    def mst_kruskal(self):
+        forest = DisjointSet(self.nodes)
+        sorted_edges = sorted(self.edges, key=lambda edge: edge[2])
+        for edge in sorted_edges:
+            if forest.find_set(edge[0]) != forest.find_set(edge[1]):
+                edge[0].parent = edge[1]
+                forest.union(edge[0], edge[1])
 
-    while len(visited_node) != len(graph.keys()):
-        for node in visited_node:
-            for neighbor in graph[node]:
-                if (neighbor not in visited_node) and (not visited_edge[(node, neighbor)]):
-                    min_heap.insert(edge_cost(node, neighbor))
-        weight, edge = min_heap.extract_min()
-        visited_node.update([edge[0], edge[1]])
-        min_spanning_tree.append(edge)
-    return min_spanning_tree
-
-
-def mst_prim(graph: Dict[Any, List], root: Node, weight: Dict[Tuple, Float]):
-    root.key = 0
-    Q = MinHeap(graph.nodes)
-    while not Q.is_empty():
-        u = Q.extract_min()
-        for v in graph.adj_list[u]:
-            if v in Q and weight[(u, v)] < v.key:
-                v.parent = u
-                Q.decrease_key(v, v.key, weight[(u, v)])
+    def print_mst(self):
+        mst = list()
+        for node in self.nodes:
+            mst.append((node, node.parent))
+        return mst
 
 
 if __name__ == '__main__':
